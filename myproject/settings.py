@@ -28,14 +28,14 @@ SECRET_KEY = '*cn96*dlgv(ql8riydyod^@@r=k*685k(sov)=$fzp6xzjmbr_'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-AUTH_USER_MODEL = 'user.UserProfile'
+AUTH_USER_MODEL = 'users.UserProfile'
 
 
 # Application definition
 
 INSTALLED_APPS = [
     'users',
-    'goods'
+    'goods',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'DjangoUeditor',
 ]
 
 MIDDLEWARE = [
