@@ -10,8 +10,8 @@ User = get_user_model()
 
 
 class ShoppingCart(models.Model):
-    user = models.ForeignKey(User)
-    goods = models.ForeignKey(Goods)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    goods = models.ForeignKey(Goods, on_delete=models.CASCADE)
     goods_num = models.IntegerField()
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
 
@@ -35,7 +35,7 @@ class OrderInfo(models.Model):
         ("alipay", "支付宝"),
         ("wechat", "微信")
     )
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     order_sn = models.CharField(max_length=11, unique=True, verbose_name="订单编号")
     trade_no = models.CharField(max_length=13, unique=True, verbose_name="交易编号", blank=True)
     pay_status = models.CharField(max_length=10, choices=PAY_STATUS, verbose_name="订单状态")
@@ -43,9 +43,10 @@ class OrderInfo(models.Model):
     order_mount = models.FloatField(max_length=11, default=0.0, verbose_name="订单金额")
     pay_time = models.DateTimeField(verbose_name="支付时间")
 
-    address = models.CharField()
-    signer_name = models.CharField(verbose_name="签收人姓名")
-    signer_mobile = models.CharField()
+    address = models.CharField(max_length=100, default="", verbose_name="收货地址")
+    signer_name = models.CharField(max_length=20, default="", verbose_name="签收人")
+    singer_mobile = models.CharField(max_length=11, verbose_name="联系电话")
+
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
 
 
@@ -53,8 +54,8 @@ class OrderGoods(models.Model):
     """
     订单的商品详情
     """
-    order = models.ForeignKey(OrderInfo)
-    goods = models.ForeignKey(Goods)
+    order = models.ForeignKey(OrderInfo, on_delete=models.CASCADE)
+    goods = models.ForeignKey(Goods, on_delete=models.CASCADE)
     goods_num = models.IntegerField(default=0, verbose_name="商品数量")
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
 
