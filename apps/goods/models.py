@@ -29,6 +29,7 @@ class GoodsCategory(models.Model):
     def __str__(self):
         return self.name
 
+
 class GoodsCategoryBrand(models.Model):
     """
     brand name
@@ -92,6 +93,7 @@ class GoodsImage(models.Model):
 
     def __str__(self):
         return self.goods.name
+
 
 class Banner(models.Model):
     """
