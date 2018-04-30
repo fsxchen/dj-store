@@ -15,10 +15,28 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.conf.urls import url
+from django.conf.urls import url, include
 from myproject.settings import MEDIA_ROOT
 from django.views.static import serve
+# from goods.views import GoodsListView
+from rest_framework.routers import DefaultRouter
+from goods.views import GoodsListViewSet
+router = DefaultRouter()
+router.register(r'goods', GoodsListViewSet)
+
+# from goods.views import GoodsListViewSet
+
+goods_list = GoodsListViewSet.as_view({
+    "get": 'list',
+})
+
+from rest_framework.documentation import include_docs_urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    # 商品列表页
+    # url(r'goods/$',goods_list, name="goods-list"),
+    url(r'^', include(router.urls)),
+    url(r'docs/', include_docs_urls(title="文档"))
 ]
