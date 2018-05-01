@@ -8,10 +8,12 @@ from rest_framework import status
 
 from rest_framework import mixins
 from rest_framework import generics
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 
-from .models import Goods
-from .serializer import GoodsSerizlizer
-
+from .models import Goods, GoodsCategory
+from .serializer import GoodsSerizlizer, GoodsCategorySerializer
+from .filters import ProductFilter
 
 # class GoodsListView(APIView):
 #     """
@@ -57,3 +59,16 @@ class GoodsListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Goods.objects.all()
     serializer_class = GoodsSerizlizer
     pagination_class = StandarResultSetPagination
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+    filter_class = ProductFilter
+    search_fields = ('name', "goods_brief", "goods_desc")
+    ordering_fields = ('sold_num', 'add_time')
+
+
+class CategoryViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    """
+    list:
+        商品分类列表数据
+    """
+    queryset = GoodsCategory.objects.filter(category_type=1)
+    serializer_class = GoodsCategorySerializer

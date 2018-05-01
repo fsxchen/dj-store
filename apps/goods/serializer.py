@@ -27,3 +27,29 @@ class GoodsSerizlizer(serializers.ModelSerializer):
     # def create(self, validated_data):
     #
     #     # return Goods.obj
+
+class GoodsCategorySerializer3(serializers.ModelSerializer):
+    """
+    商品类别序列化
+    """
+    class Meta:
+        model = GoodsCategory
+        fields = '__all__'
+
+class GoodsCategorySerializer2(serializers.ModelSerializer):
+    """
+    商品类别序列化
+    """
+    sub_cat = GoodsCategorySerializer3(many=True)
+    class Meta:
+        model = GoodsCategory
+        fields = '__all__'
+
+class GoodsCategorySerializer(serializers.ModelSerializer):
+    """
+    商品类别序列化
+    """
+    sub_cat = GoodsCategorySerializer2(many=True)
+    class Meta:
+        model = GoodsCategory
+        fields = '__all__'

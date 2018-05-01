@@ -20,9 +20,10 @@ from myproject.settings import MEDIA_ROOT
 from django.views.static import serve
 # from goods.views import GoodsListView
 from rest_framework.routers import DefaultRouter
-from goods.views import GoodsListViewSet
+from goods.views import GoodsListViewSet, CategoryViewSet
 router = DefaultRouter()
 router.register(r'goods', GoodsListViewSet)
+router.register(r'categorys', CategoryViewSet, base_name="categorys")
 
 # from goods.views import GoodsListViewSet
 
