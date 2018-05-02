@@ -54,6 +54,7 @@ class StandarResultSetPagination(PageNumberPagination):
 #         return self.list(requset, *args, **kwargs)
 
 from rest_framework import viewsets
+from rest_framework.authentication import TokenAuthentication
 
 class GoodsListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Goods.objects.all()
@@ -63,6 +64,7 @@ class GoodsListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     filter_class = ProductFilter
     search_fields = ('name', "goods_brief", "goods_desc")
     ordering_fields = ('sold_num', 'shop_price')
+    authentication_classes = (TokenAuthentication,)
 
 
 class CategoryViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
