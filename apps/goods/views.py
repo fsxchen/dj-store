@@ -56,7 +56,10 @@ class StandarResultSetPagination(PageNumberPagination):
 from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
 
-class GoodsListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+
+class GoodsListViewSet(mixins.ListModelMixin,
+                       mixins.RetrieveModelMixin,
+                       viewsets.GenericViewSet):
     queryset = Goods.objects.all()
     serializer_class = GoodsSerizlizer
     pagination_class = StandarResultSetPagination

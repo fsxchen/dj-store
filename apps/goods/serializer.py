@@ -2,6 +2,7 @@
 from rest_framework import serializers
 from .models import Goods
 from .models import GoodsCategory
+from .models import GoodsImage
 # class GoodsSerizlizer(serializers.Serializer):
 #     name = serializers.CharField(required=True, max_length=100)
 #     click_num = serializers.IntegerField(default=0)
@@ -11,15 +12,23 @@ from .models import GoodsCategory
 #
 #         return Goods.objects.create(**validated_data)
 
+
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = GoodsCategory
         fields = '__all__'
 
 
+class GoodsImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GoodsImage
+        fields = ("image",)
+
 
 class GoodsSerizlizer(serializers.ModelSerializer):
     category = CategorySerializer()
+    images = GoodsImageSerializer(many=True)
+
     class Meta:
         model = Goods
         fields = '__all__'

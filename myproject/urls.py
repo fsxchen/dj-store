@@ -21,11 +21,18 @@ from django.views.static import serve
 # from goods.views import GoodsListView
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken import views
+from users.views import SmsCodeViewSet
 
 from goods.views import GoodsListViewSet, CategoryViewSet
+from users.views import UserViewSet
+from user_operation.views import UserFavViewSet
+
 router = DefaultRouter()
 router.register(r'goods', GoodsListViewSet)
 router.register(r'categorys', CategoryViewSet, base_name="categorys")
+router.register(r'code', SmsCodeViewSet, base_name="codeview")
+router.register(r'users', UserViewSet, base_name="user")
+router.register(r'user_fav', UserFavViewSet, base_name="user_fav")
 
 # from goods.views import GoodsListViewSet
 
