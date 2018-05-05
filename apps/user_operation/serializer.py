@@ -1,7 +1,13 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from .models import UserFav
+from goods.serializer import GoodsSerizlizer
 
+class UserFavDetailSerializer(serializers.ModelSerializer):
+    goods = GoodsSerizlizer()
+    class Meta:
+        model = UserFav
+        fields = ( 'goods', 'id')
 
 class UserFavSerializer(serializers.ModelSerializer):
 

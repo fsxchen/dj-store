@@ -1,4 +1,3 @@
-import re
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from datetime import datetime, timedelta
@@ -39,6 +38,14 @@ class SmsSerializer(serializers.Serializer):
 
     class Meta:
         model = VerifyCode
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    """
+    用户详情序列化字段
+    """
+    class Meta:
+        model = User
+        fields = ("name", "gender", "birthday", "email", "mobile")
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):

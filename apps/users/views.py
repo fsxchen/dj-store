@@ -8,8 +8,11 @@ from rest_framework import mixins, viewsets
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_jwt.serializers import jwt_encode_handler, jwt_payload_handler
+from rest_framework import permissions
+from rest_framework import authentication
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 
-from .serializer import SmsSerializer, UserRegisterSerializer
+from .serializer import SmsSerializer, UserRegisterSerializer, UserDetailSerializer
 from utils.yunpian import YunPian
 from .models import VerifyCode
 
@@ -65,12 +68,33 @@ class SmsCodeViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             }, status=status.HTTP_201_CREATED)
 
 
-class UserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+class UserViewSet(mixins.CreateModelMixin,
+                  # mixins.ListModelMixin,
+                  mixins.UpdateModelMixin,
+                  mixins.RetrieveModelMixin,
+                  viewsets.GenericViewSet):
     """
-    用户
+    create:
+        用户注册
+    Re
     """
     serializer_class = UserRegisterSerializer
     queryset = User.objects.all()
+    authentication_classes = (authentication.SessionAuthentication, JSONWebTokenAuthentication)
+
+    permission_classes = (permissions.IsAuthenticated, )
+
+    def get_permissions(self):
+        if self.action == "retrieve":
+            return [permissions.IsAuthenticated()]
+        elif self.action == "create":
+            return []
+        return []
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return UserRegisterSerializer
+        return UserDetailSerializer
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -86,3 +110,6 @@ class UserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
     def perform_create(self, serializer):
         serializer.save()
+
+    def get_object(self):
+        return self.request.user
