@@ -12,12 +12,13 @@ User = get_user_model()
 class ShoppingCart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     goods = models.ForeignKey(Goods, on_delete=models.CASCADE)
-    goods_num = models.IntegerField()
+    nums = models.IntegerField()
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
 
     class Meta:
         verbose_name = "购物车"
         verbose_name_plural = verbose_name
+        unique_together = ("user", "goods")
 
     def __str__(self):
         return self.user.goods.name
@@ -28,7 +29,7 @@ class OrderInfo(models.Model):
     PAY_STATUS = (
         ("success", "成功"),
         ("cancel", "取消"),
-        ("wait", "待支付")
+        ("paying", "待支付")
     )
 
     PAY_TYPE = (
@@ -36,12 +37,12 @@ class OrderInfo(models.Model):
         ("wechat", "微信")
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    order_sn = models.CharField(max_length=11, unique=True, verbose_name="订单编号")
+    order_sn = models.CharField(max_length=11, unique=True, verbose_name="订单编号", null=True)
     trade_no = models.CharField(max_length=13, unique=True, verbose_name="交易编号", blank=True)
     pay_status = models.CharField(max_length=10, choices=PAY_STATUS, verbose_name="订单状态")
     post_script = models.CharField(max_length=200, verbose_name="订单留言")
     order_mount = models.FloatField(max_length=11, default=0.0, verbose_name="订单金额")
-    pay_time = models.DateTimeField(verbose_name="支付时间")
+    pay_time = models.DateTimeField(verbose_name="支付时间", default=datetime.now)
 
     address = models.CharField(max_length=100, default="", verbose_name="收货地址")
     signer_name = models.CharField(max_length=20, default="", verbose_name="签收人")
