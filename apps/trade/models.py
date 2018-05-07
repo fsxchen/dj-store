@@ -59,7 +59,7 @@ class OrderGoods(models.Model):
     """
     订单的商品详情
     """
-    order = models.ForeignKey(OrderInfo, on_delete=models.CASCADE)
+    order = models.ForeignKey(OrderInfo, on_delete=models.CASCADE, related_name="goods")
     goods = models.ForeignKey(Goods, on_delete=models.CASCADE)
     goods_num = models.IntegerField(default=0, verbose_name="商品数量")
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")

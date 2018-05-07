@@ -11,7 +11,7 @@ from rest_framework import viewsets, mixins
 
 from .models import OrderInfo
 
-from .serializers import ShopCartSserializer, ShopCartDetailSerializer, OrderSerializer
+from .serializers import ShopCartSserializer, ShopCartDetailSerializer, OrderSerializer, OrderDetailSerializer
 from .models import ShoppingCart, OrderGoods
 
 
@@ -48,10 +48,15 @@ class OrderViewSet(mixins.ListModelMixin,
                    viewsets.GenericViewSet):
     permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
-    serializer_class = OrderSerializer
 
     def get_queryset(self):
         return  OrderInfo.objects.filter(user=self.request.user)
+
+    def get_serializer_class(self):
+        if self.action == "retrieve":
+            return OrderDetailSerializer
+        else:
+            return  OrderSerializer
 
     def generate_order_sn(self):
         from random import Random
