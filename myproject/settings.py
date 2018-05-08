@@ -133,8 +133,14 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIR = (
+    os.path.join(BASE_DIR, "static")
+)
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -157,3 +163,8 @@ JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': timedelta(days=300),
     'JWT_AUTH_HEADER_PREFIX': 'JWT',
 }
+
+# 支付宝相关的配置
+
+privat_key_path = os.path.join(BASE_DIR, "apps/trade/keys/private_2048.txt")
+ali_pub_key_path = os.path.join(BASE_DIR, "apps/trade/keys/alipay_key_2048.txt")

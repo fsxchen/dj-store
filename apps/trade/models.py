@@ -27,9 +27,10 @@ class ShoppingCart(models.Model):
 class OrderInfo(models.Model):
 
     PAY_STATUS = (
-        ("success", "成功"),
-        ("cancel", "取消"),
-        ("paying", "待支付")
+        ("TRADE_SUCESS", "支付成功"),
+        ("TRADE_CLOSED", "超市关闭"),
+        ("WAIT_BUYER_PAY", "待支付"),
+        ("TRADE_FINISHED", "交易已完成，不可退款")
     )
 
     PAY_TYPE = (

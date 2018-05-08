@@ -3,6 +3,8 @@ from rest_framework import serializers
 from goods.models import Goods
 from .models import ShoppingCart, OrderInfo, OrderGoods
 from goods.serializer import GoodsSerizlizer
+from utils.alipay import AliPay
+from myproject.settings import ali_pub_key_path, privat_key_path
 
 class ShopCartDetailSerializer(serializers.ModelSerializer):
     goods = GoodsSerizlizer(many=False)
@@ -65,7 +67,31 @@ class OrderSerializer(serializers.ModelSerializer):
     trade_no = serializers.CharField(read_only=True)
     order_sn = serializers.CharField(read_only=True)
     pay_time = serializers.DateTimeField(read_only=True)
+    alipay_url = serializers.SerializerMethodField(read_only=True)
 
+    def get_alipay_url(self, obj):
+        """
+        生产支付的链接
+        :param obj:
+        :return:
+        """
+        alipay = AliPay(
+            appid="2016091500513709",
+            app_notify_url="http://localhost:8001/alipay/return/",
+            app_private_key_path=privat_key_path,
+            alipay_public_key_path=ali_pub_key_path,  # 支付宝的公钥，验证支付宝回传消息使用，不是你自己的公钥,
+            debug=True,  # 默认False,
+            return_url="http://47.92.87.172:8000/"
+        )
+
+        url = alipay.direct_pay(
+            subject=obj.order_sn,
+            out_trade_no=obj.order_no,
+            total_amount=obj.total_amount,
+            return_url="http://localhost:8001"
+        )
+        re_url = "https://openapi.alipaydev.com/gateway.do?{data}".format(data=url)
+        return re_url
 
     class Meta:
         model = OrderInfo

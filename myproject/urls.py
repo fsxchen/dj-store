@@ -48,8 +48,11 @@ goods_list = GoodsListViewSet.as_view({
 
 from rest_framework.documentation import include_docs_urls
 from rest_framework_jwt.views import obtain_jwt_token
+from trade.views import AliPayViewSet
+from django.views.generic import TemplateView
 
 urlpatterns = [
+    url(r'index', TemplateView.as_view(template_name="index")),
     path('admin/', admin.site.urls),
     url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
@@ -58,5 +61,6 @@ urlpatterns = [
     # url(r'goods/$',goods_list, name="goods-list"),
     url(r'^', include(router.urls)),
     url(r'^login/', obtain_jwt_token),
-    url(r'docs/', include_docs_urls(title="文档"))
+    url(r'docs/', include_docs_urls(title="文档")),
+    url(r'^alipay/return/', AliPayViewSet.as_view(), name="alipay")
 ]
