@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from rest_framework_extensions.cache.mixins import CacheResponseMixin
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 
 # Create your views here.
 
@@ -11,8 +13,9 @@ from rest_framework import generics
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 
-from .models import Goods, GoodsCategory
-from .serializer import GoodsSerizlizer, GoodsCategorySerializer
+from .models import Goods, GoodsCategory, Banner
+from .serializer import GoodsSerizlizer, GoodsCategorySerializer, BannerSerializer
+from .serializer import IndexCategorySerializer
 from .filters import ProductFilter
 
 # class GoodsListView(APIView):
@@ -31,6 +34,7 @@ from .filters import ProductFilter
 #             return Response(serializer.data, status=status.HTTP_201_CREATED)
 #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 from rest_framework.pagination import PageNumberPagination
+
 
 class StandarResultSetPagination(PageNumberPagination):
     page_size = 10
@@ -57,7 +61,8 @@ from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
 
 
-class GoodsListViewSet(mixins.ListModelMixin,
+class GoodsListViewSet(CacheResponseMixin,
+                       mixins.ListModelMixin,
                        mixins.RetrieveModelMixin,
                        viewsets.GenericViewSet):
     queryset = Goods.objects.all()
@@ -65,9 +70,17 @@ class GoodsListViewSet(mixins.ListModelMixin,
     pagination_class = StandarResultSetPagination
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_class = ProductFilter
+    throttle_classes = (UserRateThrottle, AnonRateThrottle)
     search_fields = ('name', "goods_brief", "goods_desc")
     ordering_fields = ('sold_num', 'shop_price')
     authentication_classes = (TokenAuthentication,)
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.click_num += 1
+        instance.save()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
 
 class CategoryViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
@@ -79,3 +92,17 @@ class CategoryViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets
     """
     queryset = GoodsCategory.objects.filter(category_type=1)
     serializer_class = GoodsCategorySerializer
+
+
+class BannerViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    """
+    获取轮播图
+    """
+    queryset = Banner.objects.all().order_by("index")
+    serializer_class = BannerSerializer
+
+
+class IndexCategoryViewSet(mixins.ListModelMixin,
+                           viewsets.GenericViewSet):
+    queryset = GoodsCategory.objects.filter(is_tab=True)
+    serializer_class = IndexCategorySerializer

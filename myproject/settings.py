@@ -156,7 +156,15 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         # 'rest_framework.authentication.TokenAuthentication',
-    )
+    ),
+    'DEFAULT_THROTTLE_CLASSES': (
+        'rest_framework.throttling.AnonRateThrottle',   # 匿名用户
+        'rest_framework.throttling.UserRateThrottle'    # 登陆用户
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '2/min',
+        'user': '3/min'
+    }
 }
 
 JWT_AUTH = {
@@ -168,3 +176,7 @@ JWT_AUTH = {
 
 privat_key_path = os.path.join(BASE_DIR, "apps/trade/keys/private_2048.txt")
 ali_pub_key_path = os.path.join(BASE_DIR, "apps/trade/keys/alipay_key_2048.txt")
+
+REST_FRAMEWORK_EXTENSIONS = {
+    'DEFAULT_CACHE_RESPONSE_TIMEOUT': 60 * 15
+}

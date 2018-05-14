@@ -37,6 +37,11 @@ class UserFavViewSet(mixins.CreateModelMixin,
     def get_queryset(self):
         return UserFav.objects.filter(user=self.request.user)
 
+    def perform_create(self, serializer):
+        instance = serializer.save()
+        goods = instance.goods
+        goods.fav_num += 1
+        goods.save()
 
 class LeavingMessageViewSet(mixins.ListModelMixin,
                             mixins.DestroyModelMixin,

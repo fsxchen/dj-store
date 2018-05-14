@@ -12,6 +12,7 @@ class ShopCartDetailSerializer(serializers.ModelSerializer):
         model = ShoppingCart
         fields = "__all__"
 
+
 class ShopCartSserializer(serializers.Serializer):
 
     user = serializers.HiddenField(

@@ -25,7 +25,9 @@ class ShoppingCart(models.Model):
 
 
 class OrderInfo(models.Model):
-
+    """
+    订单的详细信息
+    """
     PAY_STATUS = (
         ("TRADE_SUCESS", "支付成功"),
         ("TRADE_CLOSED", "超市关闭"),

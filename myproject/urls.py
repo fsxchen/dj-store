@@ -28,6 +28,7 @@ from users.views import UserViewSet
 from user_operation.views import UserFavViewSet, LeavingMessageViewSet, AddressViewSet
 
 from trade.views import ShoppingCartViewSet, OrderViewSet
+from goods.views import BannerViewSet, IndexCategoryViewSet
 
 router = DefaultRouter()
 router.register(r'goods', GoodsListViewSet)
@@ -39,6 +40,8 @@ router.register(r'message', LeavingMessageViewSet, base_name="message")
 router.register(r'address', AddressViewSet, base_name="address")
 router.register(r'shopping', ShoppingCartViewSet, base_name="shopping")
 router.register(r'orders', OrderViewSet, base_name="orders")
+router.register(r'banners', BannerViewSet, base_name="banners")
+router.register(r'indexgoods', IndexCategoryViewSet, base_name="indexgoods")
 
 # from goods.views import GoodsListViewSet
 
