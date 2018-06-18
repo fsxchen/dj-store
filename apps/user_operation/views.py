@@ -43,6 +43,7 @@ class UserFavViewSet(mixins.CreateModelMixin,
         goods.fav_num += 1
         goods.save()
 
+
 class LeavingMessageViewSet(mixins.ListModelMixin,
                             mixins.DestroyModelMixin,
                             mixins.CreateModelMixin,

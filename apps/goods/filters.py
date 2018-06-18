@@ -13,7 +13,6 @@ class ProductFilter(django_filters.FilterSet):
         return queryset.filter(Q(category_id=value) | Q(category__parent_category_id=value) | Q(
             category__parent_category__parent_category_id=value))
 
-
     class Meta:
         model = Goods
         fields = ["pricemin", "pricemax", 'name', 'is_hot', 'is_new']
